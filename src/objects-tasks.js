@@ -18,7 +18,7 @@
  *    shallowCopy({}) => {}
  */
 function shallowCopy(obj) {
-  return Object.assign({}, obj);
+  return { ...obj };
 }
 
 /**
@@ -76,17 +76,10 @@ function compareObjects(obj1, obj2) {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
-
-  for (const key of keys1) {
-    if (!(key in obj2) || obj1[key] !== obj2[key]) {
-      return false;
-    }
-  }
-
-  return true;
+  return (
+    keys1.length === keys2.length &&
+    keys1.every((key) => key in obj2 && obj1[key] === obj2[key])
+  );
 }
 
 /**
@@ -136,15 +129,15 @@ function makeImmutable(obj) {
  */
 function makeWord(lettersObject) {
   if (Object.keys(lettersObject).length === 0) return '';
-  const maxPosition = Math.max(...Object.values(lettersObject).flat());
 
+  const maxPosition = Math.max(...Object.values(lettersObject).flat());
   const result = new Array(maxPosition + 1).fill('');
 
-  for (const letter in lettersObject) {
-    lettersObject[letter].forEach((position) => {
+  Object.entries(lettersObject).forEach(([letter, positions]) => {
+    positions.forEach((position) => {
       result[position] = letter;
     });
-  }
+  });
 
   return result.join('');
 }
@@ -166,30 +159,33 @@ function makeWord(lettersObject) {
 function sellTickets(queue) {
   let twentyFive = 0;
   let fifty = 0;
+  let canSell = true;
 
-  for (const bill of queue) {
+  queue.forEach((bill) => {
     if (bill === 25) {
-      twentyFive++;
+      twentyFive += 1;
     } else if (bill === 50) {
       if (twentyFive === 0) {
-        return false;
+        canSell = false;
+        return;
       }
-      twentyFive--;
-      fifty++;
+      twentyFive -= 1;
+      fifty += 1;
     } else if (bill === 100) {
       if (fifty > 0 && twentyFive > 0) {
-        fifty--;
-        twentyFive--;
+        fifty -= 1;
+        twentyFive -= 1;
       } else if (twentyFive >= 3) {
         twentyFive -= 3;
       } else {
-        return false;
+        canSell = false;
       }
     }
-  }
+  });
 
-  return true;
+  return canSell;
 }
+
 /**
  * Returns the rectangle object with width and height parameters and getArea() method
  *
