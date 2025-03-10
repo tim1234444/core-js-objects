@@ -35,10 +35,10 @@ function shallowCopy(obj) {
 function mergeObjects(objects) {
   return objects.reduce((acc, obj) => {
     Object.entries(obj).forEach(([key, value]) => {
-        acc[key] = (acc[key] || 0) + value;
+      acc[key] = (acc[key] || 0) + value;
     });
     return acc;
-}, {});
+  }, {});
 }
 
 /**
@@ -55,8 +55,8 @@ function mergeObjects(objects) {
  *
  */
 function removeProperties(obj, keys) {
-  let newObj = { ...obj }; 
-  keys.forEach(key => delete newObj[key]); 
+  const newObj = { ...obj };
+  keys.forEach((key) => delete newObj[key]);
   return newObj;
 }
 
@@ -80,14 +80,13 @@ function compareObjects(obj1, obj2) {
     return false;
   }
 
-  for (let key of keys1) {
+  for (const key of keys1) {
     if (!(key in obj2) || obj1[key] !== obj2[key]) {
       return false;
     }
   }
 
   return true;
-  
 }
 
 /**
@@ -121,7 +120,7 @@ function isEmptyObject(obj) {
  *    immutableObj.newProp = 'new';
  *    console.log(immutableObj) => {a: 1, b: 2}
  */
-function makeImmutable(obj ) {
+function makeImmutable(obj) {
   return Object.freeze(obj);
 }
 
@@ -139,19 +138,15 @@ function makeWord(lettersObject) {
   if (Object.keys(lettersObject).length === 0) return '';
   const maxPosition = Math.max(...Object.values(lettersObject).flat());
 
-  
   const result = new Array(maxPosition + 1).fill('');
 
-  
   for (const letter in lettersObject) {
-    lettersObject[letter].forEach(position => {
+    lettersObject[letter].forEach((position) => {
       result[position] = letter;
     });
   }
 
- 
   return result.join('');
-
 }
 
 /**
@@ -169,31 +164,31 @@ function makeWord(lettersObject) {
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
 function sellTickets(queue) {
-  let twentyFive = 0; 
-  let fifty = 0;  
+  let twentyFive = 0;
+  let fifty = 0;
 
-  for (let bill of queue) {
+  for (const bill of queue) {
     if (bill === 25) {
-      twentyFive++;  
+      twentyFive++;
     } else if (bill === 50) {
       if (twentyFive === 0) {
-        return false; 
+        return false;
       }
-      twentyFive--;  
-      fifty++;  
+      twentyFive--;
+      fifty++;
     } else if (bill === 100) {
       if (fifty > 0 && twentyFive > 0) {
-        fifty--; 
-        twentyFive--;  
+        fifty--;
+        twentyFive--;
       } else if (twentyFive >= 3) {
-        twentyFive -= 3;  
+        twentyFive -= 3;
       } else {
-        return false;  
+        return false;
+      }
     }
-  }}
+  }
 
-  return true;  
-
+  return true;
 }
 /**
  * Returns the rectangle object with width and height parameters and getArea() method
@@ -212,7 +207,7 @@ function Rectangle(width, height) {
   this.width = width;
   this.height = height;
 
-  this.getArea = function() {
+  this.getArea = function () {
     return this.width * this.height;
   };
 }
@@ -242,9 +237,9 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON( proto, json) {
-  const obj = JSON.parse(json);  
-  Object.setPrototypeOf(obj, proto);  
+function fromJSON(proto, json) {
+  const obj = JSON.parse(json);
+  Object.setPrototypeOf(obj, proto);
   return obj;
 }
 
@@ -277,14 +272,12 @@ function fromJSON( proto, json) {
 function sortCitiesArray(arr) {
   return arr.sort((a, b) => {
     if (a.country === b.country) {
-      
       return a.city.localeCompare(b.city);
     }
-    
+
     return a.country.localeCompare(b.country);
   });
 }
-
 
 /**
  * Groups elements of the specified array by key.
